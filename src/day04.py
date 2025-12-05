@@ -23,14 +23,27 @@ def calc(positions, max=4):
                     cnt += 1
         if cnt < max:
             allowed.append(pos)
-    return len(allowed)
+    return allowed
+
+def calc2(positions):
+    removed = 0
+    removing = calc(positions)
+    removed += len(removing)
+
+    while len(removing) > 0:
+        for pos in removing:
+            del positions[pos]
+        removing = calc(positions)
+        removed += len(removing)
+    return removed
 
 
 def solve_part1(fileInfo):
     positions = get_values(fileInfo)
-    return calc(positions)
+    allowed = calc(positions)
+    return len(allowed)
 
 
 def solve_part2(fileInfo):
     positions = get_values(fileInfo)
-    return calc(positions)
+    return calc2(positions)
