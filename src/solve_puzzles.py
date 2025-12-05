@@ -7,11 +7,12 @@
 # import day06
 # import day05
 # import day04
-# import day03
+import day03
 import day02
 import day01
 import sys
-sys.path.append('src/puzzle')
+
+sys.path.append("src/puzzle")
 import puzzle
 
 test = 1
@@ -30,25 +31,26 @@ def getFileInfo(day, key="input", has_extra_file=False):
     else:
         return {"key": key, "file": f"test/data/day{day}.sample{suffix}.dat"}
 
+
 # use beautiful colors
-W  = '\033[0m'  # white (normal)
-R  = '\033[31m' # red
-G  = '\033[32m' # green
-O  = '\033[33m' # orange
-B  = '\033[34m' # blue
-P  = '\033[35m' # purple
-T  = '\033[36m' # turquoise
+W = "\033[0m"  # white (normal)
+R = "\033[31m"  # red
+G = "\033[32m"  # green
+O = "\033[33m"  # orange
+B = "\033[34m"  # blue
+P = "\033[35m"  # purple
+T = "\033[36m"  # turquoise
 
 # download all puzzles
 locked = False
 for i in range(12):
-    day = str(i+1)
+    day = str(i + 1)
     if len(day) == 1:
         day = "0" + day
     print(f"{W}Day {day}: fetching puzzle data...")
     (fileName, skipped, locked) = puzzle.fetch_for_day(day, locked)
     suffix = ""
-    if skipped == True: 
+    if skipped == True:
         suffix = f"{O} | skipped{G}"
     print(f"{W}Day {day}: {G}fetching complete: {fileName}{suffix}")
 
@@ -60,8 +62,8 @@ print(f"{W}Day {O}01{W}: Part {O}1: {G}{day01.solve_part1(getFileInfo('01'))}")
 print(f"{W}Day {O}01{W}: Part {O}2: {G}{day01.solve_part2(getFileInfo('01'))}")
 print(f"{W}Day {O}02{W}: Part {O}1: {G}{day02.solve_part1(getFileInfo('02'))}")
 print(f"{W}Day {O}02{W}: Part {O}2: {G}{day02.solve_part2(getFileInfo('02'))}")
-# print(f"{W}Day {O}03{W}: Part {O}1: {G}{day03.solve_part1(getFileInfo('03'))}")
-# print(f"{W}Day {O}03{W}: Part {O}2: {G}{day03.solve_part2(getFileInfo('03'))}")
+print(f"{W}Day {O}03{W}: Part {O}1: {G}{day03.solve_part1(getFileInfo('03'))}")
+print(f"{W}Day {O}03{W}: Part {O}2: {G}{day03.solve_part2(getFileInfo('03'))}")
 # print(f"{W}Day {O}04{W}: Part {O}1: {G}{day04.solve_part1(getFileInfo('04'))}")
 # print(f"{W}Day {O}04{W}: Part {O}2: {G}{day04.solve_part2(getFileInfo('04'))}")
 # print(f"{W}Day {O}05{W}: Part {O}1: {G}{day05.solve_part1(getFileInfo('05'))}")
