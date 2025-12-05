@@ -29,9 +29,6 @@ def calc(banks, battery_count = 2):
     return sum(results)
 
 
-def calc2(banks):
-    return 0
-
 
 def solve_part1(fileInfo):
     banks = get_values(fileInfo)
@@ -40,4 +37,4 @@ def solve_part1(fileInfo):
 
 def solve_part2(fileInfo):
     ranges = get_values(fileInfo)
-    return calc2(ranges)
+    return calc(ranges, 12)

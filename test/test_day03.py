@@ -12,6 +12,6 @@ def test_part1(day, expected_value=357):
 
 
 @pytest.mark.parametrize("day", [day])
-def test_part2(day, expected_value=0):
+def test_part2(day, expected_value=3121910778619):
     testdata = {"file": f"test/data/day{day}.sample.dat"}
     assert solve_part2(testdata) == expected_value
