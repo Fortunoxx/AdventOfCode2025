@@ -1,15 +1,3 @@
-# import day24
-# import day23
-# import day22
-# import day21
-# import day20
-# import day19
-# import day18
-# import day17
-# import day16
-# import day15
-# import day14
-# import day13
 # import day12
 # import day11
 # import day10
@@ -20,7 +8,7 @@
 # import day05
 # import day04
 # import day03
-# import day02
+import day02
 import day01
 import sys
 sys.path.append('src/puzzle')
@@ -48,7 +36,7 @@ T  = '\033[36m' # turquoise
 
 # download all puzzles
 locked = False
-for i in range(24):
+for i in range(12):
     day = str(i+1)
     if len(day) == 1:
         day = "0" + day
@@ -65,8 +53,8 @@ print(f"{G}")
 
 print(f"{W}Day {O}01{W}: Part {O}1: {G}{day01.solve_part1(getFileInfo('01'))}")
 print(f"{W}Day {O}01{W}: Part {O}2: {G}{day01.solve_part2(getFileInfo('01'))}")
-# print(f"{W}Day {O}02{W}: Part {O}1: {G}{day02.solve_part1(getFileInfo('02'))}")
-# print(f"{W}Day {O}02{W}: Part {O}2: {G}{day02.solve_part2(getFileInfo('02'))}")
+print(f"{W}Day {O}02{W}: Part {O}1: {G}{day02.solve_part1(getFileInfo('02'))}")
+print(f"{W}Day {O}02{W}: Part {O}2: {G}{day02.solve_part2(getFileInfo('02'))}")
 # print(f"{W}Day {O}03{W}: Part {O}1: {G}{day03.solve_part1(getFileInfo('03'))}")
 # print(f"{W}Day {O}03{W}: Part {O}2: {G}{day03.solve_part2(getFileInfo('03'))}")
 # print(f"{W}Day {O}04{W}: Part {O}1: {G}{day04.solve_part1(getFileInfo('04'))}")
