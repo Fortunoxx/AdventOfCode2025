@@ -14,7 +14,12 @@ import sys
 sys.path.append('src/puzzle')
 import puzzle
 
-test = 0
+test = 1
+
+if len(sys.argv) > 1:
+    # First argument: test mode (0 or 1)
+    test = int(sys.argv[1])
+
 
 def getFileInfo(day, key="input", has_extra_file=False):
     suffix = ""
