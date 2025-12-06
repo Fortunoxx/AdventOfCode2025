@@ -29,15 +29,6 @@ def calc(ranges, ingredients):
 
 
 def calc2(ranges):
-    valid = set()
-    for r in ranges:
-        for num in range(r[0], r[1] + 1): 
-            # if num not in valid:
-            valid.add(num) # set automatically handles duplicates
-    return valid
-
-
-def calc3(ranges):
     merged = []
     sorted_ranges = sorted(ranges, key=lambda x: x[0])
 
@@ -53,7 +44,7 @@ def calc3(ranges):
 
     sum = 0
     for m in merged:
-        sum += (m[1] - m[0] + 1)
+        sum += m[1] - m[0] + 1
     return sum
 
 
@@ -65,5 +56,5 @@ def solve_part1(fileInfo):
 
 def solve_part2(fileInfo):
     ranges, _ = get_values(fileInfo)
-    valid = calc3(ranges)
+    valid = calc2(ranges)
     return valid
