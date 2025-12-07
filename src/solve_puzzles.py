@@ -1,84 +1,160 @@
-# import day12
-# import day11
-# import day10
-# import day09
-# import day08
-# import day07
-import day06
-import day05
-import day04
-import day03
-import day02
-import day01
-import sys
+"""
+Advent of Code 2025 Puzzle Solver
+Main entry point for solving all daily puzzles.
+"""
 
+import sys
+from typing import Dict, Tuple
+import importlib
+
+# Add puzzle module to path
 sys.path.append("src/puzzle")
 import puzzle
 
-test = 1
 
-if len(sys.argv) > 1:
-    # First argument: test mode (0 or 1)
-    test = int(sys.argv[1])
+# ANSI Color codes
+class Colors:
+    """Terminal color codes for formatted output."""
+
+    RESET = "\033[0m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    ORANGE = "\033[33m"
+    BLUE = "\033[34m"
+    PURPLE = "\033[35m"
+    TURQUOISE = "\033[36m"
 
 
-def getFileInfo(day, key="input", has_extra_file=False):
-    suffix = ""
-    if has_extra_file == True:
-        suffix = "-2"
-    if test == 0:
-        return {"key": key, "file": f"src/data/day{day}.input.dat"}
+class PuzzleSolver:
+    """Handles solving Advent of Code puzzles."""
+
+    def __init__(self, test_mode: bool = True):
+        """
+        Initialize puzzle solver.
+
+        Args:
+            test_mode: If True, use sample data. If False, use real input data.
+        """
+        self.test_mode = test_mode
+        self.max_day = 6  # Update as more days are completed
+
+    def get_file_info(
+        self, day: int, key: str = "input", has_extra_file: bool = False
+    ) -> Dict[str, str]:
+        """
+        Get file path information for a puzzle day.
+
+        Args:
+            day: Day number (1-25)
+            key: File key identifier
+            has_extra_file: Whether day has a secondary input file
+
+        Returns:
+            Dictionary with key and file path
+        """
+        day_str = f"{day:02d}"
+        suffix = "-2" if has_extra_file else ""
+
+        if self.test_mode:
+            file_path = f"test/data/day{day_str}.sample{suffix}.dat"
+        else:
+            file_path = f"src/data/day{day_str}.input.dat"
+
+        return {"key": key, "file": file_path}
+
+    def fetch_puzzle_data(self) -> None:
+        """Download puzzle input data for all days."""
+        print(f"{Colors.PURPLE}\n--- Fetching puzzle data ---{Colors.RESET}\n")
+
+        locked = False
+        for day_num in range(1, 13):  # Days 1-12
+            day_str = f"{day_num:02d}"
+            print(f"{Colors.RESET}Day {day_str}: fetching puzzle data...")
+
+            file_name, skipped, locked = puzzle.fetch_for_day(day_str, locked)
+
+            status = f"{Colors.ORANGE} | skipped" if skipped else ""
+            print(
+                f"{Colors.RESET}Day {day_str}: {Colors.GREEN}fetching complete: {file_name}{status}"
+            )
+
+    def solve_day(self, day: int) -> Tuple[any, any]:
+        """
+        Solve both parts of a specific day's puzzle.
+
+        Args:
+            day: Day number to solve
+
+        Returns:
+            Tuple of (part1_result, part2_result)
+        """
+        try:
+            day_module = importlib.import_module(f"day{day:02d}")
+            file_info = self.get_file_info(day)
+
+            part1 = day_module.solve_part1(file_info)
+            part2 = day_module.solve_part2(file_info)
+
+            return part1, part2
+        except (ImportError, AttributeError) as e:
+            return f"Not implemented", f"Not implemented"
+
+    def print_result(self, day: int, part: int, result: any) -> None:
+        """
+        Print formatted puzzle result.
+
+        Args:
+            day: Day number
+            part: Part number (1 or 2)
+            result: Solution result
+        """
+        print(
+            f"{Colors.RESET}Day {Colors.ORANGE}{day:02d}{Colors.RESET}: "
+            f"Part {Colors.ORANGE}{part}{Colors.RESET}: "
+            f"{Colors.GREEN}{result}"
+        )
+
+    def solve_all(self) -> None:
+        """Solve all available puzzle days."""
+        print(f"{Colors.PURPLE}\n--- Solving puzzles now ---{Colors.RESET}\n")
+
+        for day in range(1, self.max_day + 1):
+            try:
+                part1, part2 = self.solve_day(day)
+                self.print_result(day, 1, part1)
+                self.print_result(day, 2, part2)
+            except Exception as e:
+                print(f"{Colors.RED}Day {day:02d}: Error - {e}{Colors.RESET}")
+
+
+def parse_arguments() -> bool:
+    """
+    Parse command line arguments.
+
+    Returns:
+        Boolean indicating test mode (True) or production mode (False)
+    """
+    if len(sys.argv) > 1:
+        test_mode = int(sys.argv[1]) != 0
     else:
-        return {"key": key, "file": f"test/data/day{day}.sample{suffix}.dat"}
+        test_mode = True  # Default to test mode
+
+    return test_mode
 
 
-# use beautiful colors
-W = "\033[0m"  # white (normal)
-R = "\033[31m"  # red
-G = "\033[32m"  # green
-O = "\033[33m"  # orange
-B = "\033[34m"  # blue
-P = "\033[35m"  # purple
-T = "\033[36m"  # turquoise
+def main() -> None:
+    """Main entry point for puzzle solver."""
+    test_mode = parse_arguments()
 
-# download all puzzles
-locked = False
-for i in range(12):
-    day = str(i + 1)
-    if len(day) == 1:
-        day = "0" + day
-    print(f"{W}Day {day}: fetching puzzle data...")
-    (fileName, skipped, locked) = puzzle.fetch_for_day(day, locked)
-    suffix = ""
-    if skipped == True:
-        suffix = f"{O} | skipped{G}"
-    print(f"{W}Day {day}: {G}fetching complete: {fileName}{suffix}")
+    mode_str = "TEST" if test_mode else "PUZZLE"
+    print(f"{Colors.TURQUOISE}Running in {mode_str} mode{Colors.RESET}")
 
-print(f"{P}")
-print(f"--- Solving puzzles now ---")
-print(f"{G}")
+    solver = PuzzleSolver(test_mode=test_mode)
+    solver.fetch_puzzle_data()
+    solver.solve_all()
 
-print(f"{W}Day {O}01{W}: Part {O}1: {G}{day01.solve_part1(getFileInfo('01'))}")
-print(f"{W}Day {O}01{W}: Part {O}2: {G}{day01.solve_part2(getFileInfo('01'))}")
-print(f"{W}Day {O}02{W}: Part {O}1: {G}{day02.solve_part1(getFileInfo('02'))}")
-print(f"{W}Day {O}02{W}: Part {O}2: {G}{day02.solve_part2(getFileInfo('02'))}")
-print(f"{W}Day {O}03{W}: Part {O}1: {G}{day03.solve_part1(getFileInfo('03'))}")
-print(f"{W}Day {O}03{W}: Part {O}2: {G}{day03.solve_part2(getFileInfo('03'))}")
-print(f"{W}Day {O}04{W}: Part {O}1: {G}{day04.solve_part1(getFileInfo('04'))}")
-print(f"{W}Day {O}04{W}: Part {O}2: {G}{day04.solve_part2(getFileInfo('04'))}")
-print(f"{W}Day {O}05{W}: Part {O}1: {G}{day05.solve_part1(getFileInfo('05'))}")
-print(f"{W}Day {O}05{W}: Part {O}2: {G}{day05.solve_part2(getFileInfo('05'))}")
-print(f"{W}Day {O}06{W}: Part {O}1: {G}{day06.solve_part1(getFileInfo('06'))}")
-print(f"{W}Day {O}06{W}: Part {O}2: {G}{day06.solve_part2(getFileInfo('06'))}")
-# print(f"{W}Day {O}07{W}: Part {O}1: {G}{day07.solve_part1(getFileInfo('07'))}")
-# print(f"{W}Day {O}07{W}: Part {O}2: {G}{day07.solve_part2(getFileInfo('07'))}")
-# print(f"{W}Day {O}08{W}: Part {O}1: {G}{day08.solve_part1(getFileInfo('08'))}")
-# print(f"{W}Day {O}08{W}: Part {O}2: {G}{day08.solve_part2(getFileInfo('08'))}")
-# print(f"{W}Day {O}09{W}: Part {O}1: {G}{day09.solve_part1(getFileInfo('09'))}")
-# print(f"{W}Day {O}09{W}: Part {O}2: {G}{day09.solve_part2(getFileInfo('09'))}")
-# print(f"{W}Day {O}10{W}: Part {O}1: {G}{day10.solve_part1(getFileInfo('10'))}")
-# print(f"{W}Day {O}10{W}: Part {O}2: {G}{day10.solve_part2(getFileInfo('10'))}")
-# print(f"{W}Day {O}11{W}: Part {O}1: {G}{day11.solve_part1(getFileInfo('11'))}")
-# print(f"{W}Day {O}11{W}: Part {O}2: {G}{day11.solve_part2(getFileInfo('11'))}")
-# print(f"{W}Day {O}12{W}: Part {O}1: {G}{day12.solve_part1(getFileInfo('12'))}")
-# print(f"{W}Day {O}12{W}: Part {O}2: {G}{day12.solve_part2(getFileInfo('12'))}")
+    print(f"\n{Colors.GREEN}All puzzles complete!{Colors.RESET}\n")
+
+
+if __name__ == "__main__":
+    main()
