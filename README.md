@@ -5,7 +5,7 @@
 [![Languages](https://img.shields.io/github/languages/top/Fortunoxx/AdventOfCode2025)](https://github.com/Fortunoxx/AdventOfCode2025/)
 [![License](https://img.shields.io/github/license/Fortunoxx/AdventOfCode2025)](https://github.com/Fortunoxx/AdventOfCode2025/blob/main/LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/Fortunoxx/AdventOfCode2025)](https://github.com/Fortunoxx/AdventOfCode2025/)
-[![Days Completed](https://img.shields.io/badge/days%20completed-1.5-green)](https://adventofcode.com/2025/)
+[![Days Completed](https://img.shields.io/badge/days%20completed-5.5-green)](https://adventofcode.com/2025/)
 
 Get started at [https://adventofcode.com/2025](https://adventofcode.com/2025)
 
