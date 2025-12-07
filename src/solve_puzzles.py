@@ -36,7 +36,7 @@ class PuzzleSolver:
             test_mode: If True, use sample data. If False, use real input data.
         """
         self.test_mode = test_mode
-        self.max_day = 6  # Update as more days are completed
+        self.max_day = 7  # Update as more days are completed
 
     def get_file_info(
         self, day: int, key: str = "input", has_extra_file: bool = False
