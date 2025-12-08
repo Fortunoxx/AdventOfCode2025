@@ -44,10 +44,55 @@ def calc(pos, splitters, maxY):
     return hitTotal
 
 
+# positions is a dict of position: {(0,0): 3} means 3 beams at that position
+def calc_beam_locations2(positions, splitters):
+    newPositions = {}
+    for p in positions:
+        if p in splitters:
+            left = (p[0] - 1, p[1])
+            right = (p[0] + 1, p[1])
+
+            leftBeam = (
+                newPositions[left] + positions[p]
+                if left in newPositions
+                else positions[p] 
+            )
+            rightBeam = (
+                newPositions[right] + positions[p]
+                if right in newPositions
+                else positions[p]
+            )
+
+            newPositions[left] = leftBeam
+            newPositions[right] = rightBeam
+        else:
+            newPositions[p] = newPositions[right] + positions[p] if p in newPositions else positions[p]
+    return newPositions
+
+
+def calc2(pos, splitters, maxY):
+    currentY = pos[1]
+    newPositions = {}
+    newPositions[pos] = 1
+    while currentY < maxY - 1:
+        positions = calc_beam_locations2(newPositions, splitters)
+        newPositions = {}
+        for p in positions:
+            newP = (p[0], p[1] + 1)
+            newPositions[newP] = positions[p]
+        currentY += 1
+
+    totalTimelines = 0
+    for p in newPositions:
+        totalTimelines += newPositions[p]
+    return totalTimelines
+
+
 def solve_part1(fileInfo):
     pos, splitters, maxY = get_values(fileInfo)
     return calc(pos, splitters, maxY)
 
 
 def solve_part2(fileInfo):
-    return 0
+    pos, splitters, maxY = get_values(fileInfo)
+    return calc2(pos, splitters, maxY)
